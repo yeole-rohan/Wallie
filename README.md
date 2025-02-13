@@ -1,7 +1,3 @@
-Here’s a well-structured and engaging **README.md** file for your **Wallie** project:  
-
----
-
 # 🌟 Wallie - A Wallpaper Destination for Everyone 🎨  
 
 ## 📌 Introduction  
