@@ -1,0 +1,56 @@
+repos:
+  - repo: https://github.com/pre-commit/pre-commit-hooks
+    rev: v4.1.0
+    hooks:
+      - id: check-added-large-files # Prevents large files (greater than 3000 KB) from being committed to the repository.
+        args: [ '--maxkb=3000' ]
+      - id: check-ast # Ensures that Python files can be parsed without errors, by checking their Abstract Syntax Tree (AST).
+      - id: check-builtin-literals # Ensures that empty Python built-in types (like list(), dict(), etc.) are initialized with the appropriate literal syntax ([], {}, etc.).
+      - id: check-docstring-first # Checks that a Python file doesn’t have code before the docstring, which is a common convention.
+      - id: check-executables-have-shebangs # Ensures that executable files (non-binary) have a shebang (#!) at the top to specify which interpreter to use.
+      - id: check-json # Validates that JSON files have correct syntax.
+      - id: check-byte-order-marker # Removes any UTF-8 byte order marker (BOM) from files.
+      - id: end-of-file-fixer # Makes sure files end in a newline and only a newline.
+      - id: check-case-conflict # Check for files with names that would conflict on a case-insensitive filesystem like MacOS HFS+ or Windows FAT
+      - id: check-merge-conflict # Check for files that contain merge conflict strings (e.g., <<<<<<<, =======, >>>>>>>).
+      - id: check-symlinks # Ensures that symbolic links point to valid files.
+      - id: check-toml # Attempts to load all TOML files to verify syntax.
+      - id: check-vcs-permalinks # Ensures that links to vcs websites are permalinks.
+      - id: check-xml # Attempts to load all xml files to verify syntax.
+      - id: check-yaml # Attempts to load all yaml files to verify syntax.
+        args: [ --allow-multiple-documents ]
+      - id: debug-statements #Check for debugger imports and py37+ breakpoint() calls in python source.
+      - id: detect-private-key #Checks for the existence of private keys.
+      - id: destroyed-symlinks #Detects symlinks which are changed to regular files with a content of a path which that symlink was pointing to.
+      - id: detect-aws-credentials #Checks for the existence of AWS secrets that you have set up with the AWS CLI.
+        args: [--allow-missing-credentials]
+      - id: mixed-line-ending #Replaces or checks mixed line ending.
+        args: [ '--fix=lf' ] #Forces replacing line ending by respectively LF
+
+
+  - repo: https://github.com/ambv/black
+    rev: "22.3.0"
+    hooks:
+      - id: black
+        args: [ --config=black-config.toml ]
+
+  - repo: https://github.com/timothycrosley/isort
+    rev: "5.12.0"
+    hooks:
+      - id: isort
+        args: [ "--profile", "black" ]
+
+  - repo: https://github.com/pycqa/flake8
+    rev: "3.9.1"
+    hooks:
+      - id: flake8
+        args: [ --config=.flake8 ]
+        additional_dependencies: [ flake8-docstrings, flake8-annotations ]
+
+  - repo: https://github.com/PyCQA/bandit
+    rev: '1.7.0'
+    hooks:
+      - id: bandit
+        language_version: python3
+        args: [ "--exclude" ,
+                "./.eggs/*,*/tests/*,tools/*" ]
