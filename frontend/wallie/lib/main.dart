@@ -1,20 +1,26 @@
 import 'package:flutter/material.dart';
+import 'package:wallie/presentation/screens/signup_screen.dart';
 
 void main() {
-  runApp(const MainApp());
+  runApp(MyApp());
 }
 
-class MainApp extends StatelessWidget {
-  const MainApp({super.key});
+class MyApp extends StatelessWidget {
+  const MyApp({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return const MaterialApp(
-      home: Scaffold(
-        body: Center(
-          child: Text('Hello World!'),
-        ),
+    return MaterialApp(
+      debugShowCheckedModeBanner: false,
+      title: 'Wallie',
+      theme: ThemeData(
+        primarySwatch: Colors.blue,
       ),
+      initialRoute: 'signup',
+      routes: {
+        'signup': (context) => SignupScreen(),
+        // Add more routes here (e.g., login, home screen)
+      },
     );
   }
 }
