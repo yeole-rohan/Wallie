@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:dio/dio.dart';
 import 'package:email_validator/email_validator.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:intl_phone_field/intl_phone_field.dart';
 import 'package:wallie/core/constants.dart';
 
@@ -19,6 +20,7 @@ class _SignupScreenState extends State<SignupScreen> {
   final TextEditingController _lastNameController = TextEditingController();
   String _fullMobileNumber = "";
   bool _isLoading = false;
+  final _storage = const FlutterSecureStorage();
 
   // Function to Sign up User
   Future<void> _signUp() async {
@@ -40,6 +42,32 @@ class _SignupScreenState extends State<SignupScreen> {
 
       if (response.statusCode == 201) {
         _showMessage("Account Created Successfully!", Colors.green);
+
+        // Auto-login user after signup
+        final loginResponse = await Dio().post(
+          ApiConstants.login,
+          data: {
+            "email": _emailController.text.trim(),
+            "password": _passwordController.text,
+          },
+        );
+        print('login data ${loginResponse.data}');
+        if (loginResponse.statusCode == 200 &&
+            loginResponse.data["access"] != null) {
+          final data = response.data;
+          // Save data in secure storage
+          await _storage.write(key: "access_token", value: data["access"]);
+          await _storage.write(key: "refresh_token", value: data["refresh"]);
+          await _storage.write(key: "email", value: data["email"]);
+          await _storage.write(key: "full_name", value: data["full_name"]);
+          await _storage.write(
+              key: "mobile_number", value: data["mobile_number"]);
+
+          // Navigate to Home Screen using named route
+          Navigator.pushNamed(context, 'home');
+        } else {
+          _showMessage("Signup successful, but login failed!", Colors.orange);
+        }
       } else {
         _showMessage("Something went wrong!", Colors.red);
       }
@@ -132,6 +160,17 @@ class _SignupScreenState extends State<SignupScreen> {
                   child: _isLoading
                       ? const CircularProgressIndicator(color: Colors.white)
                       : const Text("Sign Up"),
+                ),
+              ),
+              const SizedBox(height: 10),
+              Center(
+                child: // Spacing between buttons
+                    TextButton(
+                  onPressed: () {
+                    Navigator.pop(
+                        context); // ✅ Navigate to Login Page
+                  },
+                  child: const Text("Already have an account? Login"),
                 ),
               ),
             ],
