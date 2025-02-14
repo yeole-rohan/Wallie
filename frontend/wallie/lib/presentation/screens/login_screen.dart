@@ -68,48 +68,53 @@ class _LoginScreenState extends State<LoginScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(title: const Text("Login")),
-      body: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: Form(
-          key: _formKey,
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              TextFormField(
-                controller: _emailController,
-                keyboardType: TextInputType.emailAddress,
-                decoration: const InputDecoration(labelText: "Email"),
-                validator: (value) => EmailValidator.validate(value ?? "")
-                    ? null
-                    : "Enter a valid email",
-              ),
-              const SizedBox(height: 10),
-              TextFormField(
-                controller: _passwordController,
-                obscureText: true,
-                decoration: const InputDecoration(labelText: "Password"),
-                validator: (value) => (value == null || value.length < 6)
-                    ? "Enter a valid password"
-                    : null,
-              ),
-              const SizedBox(height: 20),
-              ElevatedButton(
-                onPressed: _isLoading ? null : _login,
-                child: _isLoading
-                    ? const CircularProgressIndicator(color: Colors.white)
-                    : const Text("Login"),
-              ),
-              const SizedBox(height: 10), // Spacing between buttons
-              TextButton(
-                onPressed: () {
-                  Navigator.pushNamed(
-                      context, 'signup'); // ✅ Navigate to Signup Page
-                },
-                child: const Text("Don't have an account? Sign Up"),
-              ),
-            ],
+    return PopScope(
+      canPop: false, // ❌ Disable back navigation
+      child: Scaffold(
+        appBar: AppBar(
+            title: const Text("Login"),
+            automaticallyImplyLeading: false), // ❌ Hide back button in AppBar,
+        body: Padding(
+          padding: const EdgeInsets.all(16.0),
+          child: Form(
+            key: _formKey,
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                TextFormField(
+                  controller: _emailController,
+                  keyboardType: TextInputType.emailAddress,
+                  decoration: const InputDecoration(labelText: "Email"),
+                  validator: (value) => EmailValidator.validate(value ?? "")
+                      ? null
+                      : "Enter a valid email",
+                ),
+                const SizedBox(height: 10),
+                TextFormField(
+                  controller: _passwordController,
+                  obscureText: true,
+                  decoration: const InputDecoration(labelText: "Password"),
+                  validator: (value) => (value == null || value.length < 6)
+                      ? "Enter a valid password"
+                      : null,
+                ),
+                const SizedBox(height: 20),
+                ElevatedButton(
+                  onPressed: _isLoading ? null : _login,
+                  child: _isLoading
+                      ? const CircularProgressIndicator(color: Colors.white)
+                      : const Text("Login"),
+                ),
+                const SizedBox(height: 10), // Spacing between buttons
+                TextButton(
+                  onPressed: () {
+                    Navigator.pushNamed(
+                        context, 'signup'); // ✅ Navigate to Signup Page
+                  },
+                  child: const Text("Don't have an account? Sign Up"),
+                ),
+              ],
+            ),
           ),
         ),
       ),

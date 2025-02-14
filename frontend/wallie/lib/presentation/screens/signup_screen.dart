@@ -4,6 +4,7 @@ import 'package:email_validator/email_validator.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:intl_phone_field/intl_phone_field.dart';
 import 'package:wallie/core/constants.dart';
+import 'package:wallie/presentation/screens/home_screen.dart';
 
 class SignupScreen extends StatefulWidget {
   const SignupScreen({super.key});
@@ -63,8 +64,10 @@ class _SignupScreenState extends State<SignupScreen> {
           await _storage.write(
               key: "mobile_number", value: data["mobile_number"]);
 
-          // Navigate to Home Screen using named route
-          Navigator.pushNamed(context, 'home');
+          Navigator.push(
+            context,
+            MaterialPageRoute(builder: (context) => const HomeScreen()),
+          );
         } else {
           _showMessage("Signup successful, but login failed!", Colors.orange);
         }
@@ -167,8 +170,7 @@ class _SignupScreenState extends State<SignupScreen> {
                 child: // Spacing between buttons
                     TextButton(
                   onPressed: () {
-                    Navigator.pop(
-                        context); // ✅ Navigate to Login Page
+                    Navigator.pop(context); // ✅ Navigate to Login Page
                   },
                   child: const Text("Already have an account? Login"),
                 ),
